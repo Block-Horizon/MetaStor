@@ -13,11 +13,11 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: "Home", href: "#home" },
-  { name: "Features", href: "#features" },
-  { name: "How It Works", href: "#how-it-works" },
-  { name: "Security", href: "#security" },
-  { name: "Team", href: "#team" },
+  { name: "Home", href: "/" },
+  { name: "Features", href: "features" },
+  { name: "How It Works", href: "how-it-works" },
+  { name: "Security", href: "security" },
+  { name: "Pricing", href: "pricing" },
 ];
 
 export function Navbar() {
@@ -29,7 +29,9 @@ export function Navbar() {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const navVariants = {
@@ -91,7 +93,7 @@ export function Navbar() {
                 </motion.div>
               ))}
               <motion.div variants={itemVariants} className="ml-4">
-                <ModeToggle />
+                {/* <ModeToggle /> */}
               </motion.div>
               <motion.div variants={itemVariants} className="ml-2">
                 <Button className="bg-zinc-100 text-zinc-900 hover:bg-zinc-200 hover:scale-105 transform transition-all duration-300">
@@ -103,7 +105,9 @@ export function Navbar() {
 
           <div className="md:hidden">
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
               className="p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-zinc-900"
             >
               <span className="sr-only">Open menu</span>
@@ -156,7 +160,9 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className="block px-4 py-2 text-base font-medium text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 rounded-lg transition-all duration-300"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      setIsOpen(false);
+                    }}
                   >
                     {item.name}
                   </Link>

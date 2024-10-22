@@ -16,8 +16,8 @@ module.exports = {
     ...[
       "@vercel/style-guide/eslint/node",
       "@vercel/style-guide/eslint/typescript",
-      "@vercel/style-guide/eslint/browser",
-      "@vercel/style-guide/eslint/react",
+      // "@vercel/style-guide/eslint/browser",
+      // "@vercel/style-guide/eslint/react",
       "@vercel/style-guide/eslint/next",
     ].map(require.resolve),
     "turbo",

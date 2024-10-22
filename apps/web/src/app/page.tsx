@@ -1,46 +1,44 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Navbar } from "../components/navbar";
+import { motion } from "framer-motion";
 import { BackgroundBeams } from "@repo/ui/components/ui/background-beams";
 import { Button } from "@repo/ui/components/ui/button";
 import { SparklesCore } from "@repo/ui/components/ui/sparkles";
 import { TextGenerateEffect } from "@repo/ui/components/ui/text-generate-effect";
-import { AnimatedTooltip } from "@repo/ui/components/ui/animated-tooltip";
 import { HoverEffect } from "@repo/ui/components/ui/card-hover-effect";
-import { cn } from "@repo/ui/lib/utils";
+import { Navbar } from "../components/navbar";
 
-interface TeamMember {
-  id: number;
-  name: string;
-  designation: string;
-  image: string;
-}
+// interface TeamMember {
+//   id: number;
+//   name: string;
+//   designation: string;
+//   image: string;
+// }
 
-const teamMembers: TeamMember[] = [
-  {
-    id: 1,
-    name: "John Doe",
-    designation: "Founder & CEO",
-    image:
-      "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    designation: "CTO",
-    image:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-  },
-  {
-    id: 3,
-    name: "Robert Johnson",
-    designation: "Lead Developer",
-    image:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-  },
-];
+// const teamMembers: TeamMember[] = [
+//   {
+//     id: 1,
+//     name: "John Doe",
+//     designation: "Founder & CEO",
+//     image:
+//       "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
+//   },
+//   {
+//     id: 2,
+//     name: "Jane Smith",
+//     designation: "CTO",
+//     image:
+//       "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+//   },
+//   {
+//     id: 3,
+//     name: "Robert Johnson",
+//     designation: "Lead Developer",
+//     image:
+//       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
+//   },
+// ];
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -236,7 +234,7 @@ export default function Home() {
       </section>
 
       {/* Team Section */}
-      <section
+      {/* <section
         id="team"
         className="py-20 relative bg-gradient-to-b from-zinc-950 to-zinc-900"
       >
@@ -248,7 +246,7 @@ export default function Home() {
             <AnimatedTooltip items={teamMembers} />
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="py-20 relative">

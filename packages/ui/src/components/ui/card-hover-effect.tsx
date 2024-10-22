@@ -27,12 +27,11 @@ export const HoverEffect = ({
       {items.map((item, idx) => (
         <Link
           href={item?.link ?? ""}
-          key={item?.link}
+          key={item?.link ?? ""}
           className="relative group  block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
-          {item.image}
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
@@ -51,7 +50,12 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
-            <CardTitle>{item.title}</CardTitle>
+            <CardTitle>
+              <div className="flex flex-row gap-3">
+                {item.image}
+                {item.title}
+              </div>
+            </CardTitle>
             <CardDescription>{item.description}</CardDescription>
           </Card>
         </Link>
