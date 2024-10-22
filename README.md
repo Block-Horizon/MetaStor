@@ -1,59 +1,152 @@
-# Turborepo Tailwind CSS starter
+# 🚀 DecentralStore - Decentralized Storage Platform
 
-This is an official starter Turborepo.
+[![NextJS](https://img.shields.io/badge/Next.js%2014-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Solana](https://img.shields.io/badge/Solana-black?style=for-the-badge&logo=solana&logoColor=14F195)](https://solana.com/)
+[![IPFS](https://img.shields.io/badge/IPFS-65C2CB?style=for-the-badge&logo=ipfs&logoColor=white)](https://ipfs.tech/)
+[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/)
+[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-## Using this example
+## 📖 About
 
-Run the following command:
+DecentralStore is a revolutionary decentralized storage platform that connects storage providers with users seeking secure, distributed storage solutions. Built on Solana's high-performance blockchain and leveraging IPFS for distributed storage, our platform offers a seamless marketplace for decentralized storage services.
 
-```sh
-npx create-turbo@latest -e with-tailwind
+### 🌟 Key Features
+
+- 🔐 Decentralized file storage using IPFS
+- ⚡ Lightning-fast transactions on Solana blockchain
+- 💼 Marketplace for storage providers and renters
+- 🔒 End-to-end encryption
+- 🌐 Global network of storage providers
+- 💰 Flexible pricing models
+- 📊 Real-time analytics and monitoring
+
+## 🏗️ Project Structure
+
+```
+.
+├── apps/
+│   ├── docs/            # Documentation site
+│   └── web/            # Main web application
+├── packages/
+│   ├── config-eslint/   # ESLint configurations
+│   ├── config-tailwind/ # Tailwind CSS configurations
+│   ├── config-typescript/ # TypeScript configurations
+│   └── ui/             # Shared UI components
 ```
 
-## What's inside?
+## 🛠️ Tech Stack
 
-This Turborepo includes the following packages/apps:
+- **Frontend**
 
-### Apps and Packages
+  - Next.js 14 (App Router)
+  - TailwindCSS
+  - shadcn/ui components
 
-- `docs`: a [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `web`: another [Next.js](https://nextjs.org/) app with [Tailwind CSS](https://tailwindcss.com/)
-- `ui`: a stub React component library with [Tailwind CSS](https://tailwindcss.com/) shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **Backend**
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+  - Postgres Database
+  - Prisma ORM
+  - IPFS
+  - Solana Blockchain
 
-### Building packages/ui
+- **DevOps**
+  - Turborepo
+  - Docker
+  - GitHub Actions
 
-This example is set up to produce compiled styles for `ui` components into the `dist` directory. The component `.tsx` files are consumed by the Next.js apps directly using `transpilePackages` in `next.config.js`. This was chosen for several reasons:
+## 🚀 Getting Started
 
-- Make sharing one `tailwind.config.js` to apps and packages as easy as possible.
-- Make package compilation simple by only depending on the Next.js Compiler and `tailwindcss`.
-- Ensure Tailwind classes do not overwrite each other. The `ui` package uses a `ui-` prefix for it's classes.
-- Maintain clear package export boundaries.
+### Prerequisites
 
-Another option is to consume `packages/ui` directly from source without building. If using this option, you will need to update the `tailwind.config.js` in your apps to be aware of your package locations, so it can find all usages of the `tailwindcss` class names for CSS compilation.
+- Node.js 18.x or later
+- PostgreSQL
+- Solana CLI tools
+- IPFS daemon
+- npm (recommended)
 
-For example, in [tailwind.config.js](packages/tailwind-config/tailwind.config.js):
+### Installation
 
-```js
-  content: [
-    // app content
-    `src/**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/ui/*.{js,ts,jsx,tsx}",
-  ],
+1. Clone the repository:
+
+```bash
+https://github.com/kushwahramkumar2003/MetaStor
+cd MetaStor
 ```
 
-If you choose this strategy, you can remove the `tailwindcss` and `autoprefixer` dependencies from the `ui` package.
+2. Install dependencies:
 
-### Utilities
+```bash
+npm install
+```
 
-This Turborepo has some additional tools already setup for you:
+3. Set up environment variables:
 
-- [Tailwind CSS](https://tailwindcss.com/) for styles
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-# MetaStor
+```bash
+cp apps/web/.env.example apps/web/.env
+```
+
+4. Set up the database:
+
+```bash
+cd apps/web
+npx prisma migrate dev
+```
+
+5. Start the development servers:
+
+```bash
+npm run dev
+```
+
+## 🔧 Development
+
+### Commands
+
+- `npm run dev` - Start all applications in development mode
+- `npm run build` - Build all applications and packages
+- `npm run lint` - Lint all applications and packages
+- `npm run test` - Run tests across applications
+- `npm run clean` - Clean all builds
+
+### Working with Turborepo
+
+This project uses Turborepo for efficient build system and monorepo management. The workspace is structured as follows:
+
+- `apps/*` - Application code
+- `packages/*` - Shared packages
+- `config/*` - Shared configurations
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔮 Future Roadmap
+
+- [ ] AI-driven storage optimization
+- [ ] Cross-chain integration
+- [ ] Mobile applications
+- [ ] Enhanced provider reputation system
+- [ ] Advanced analytics dashboard
+
+## 🌟 Acknowledgements
+
+- [Solana](https://solana.com/)
+- [IPFS](https://ipfs.tech/)
+- [Next.js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Turborepo](https://turborepo.org/)
+
+---
+
+<p align="center">Built with ❤️ by the MetaStor Team</p>
