@@ -1,4 +1,4 @@
-# 🚀 DecentralStore - Decentralized Storage Platform
+# 🚀 MetaStor - Decentralized Storage Platform
 
 [![NextJS](https://img.shields.io/badge/Next.js%2014-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![Solana](https://img.shields.io/badge/Solana-black?style=for-the-badge&logo=solana&logoColor=14F195)](https://solana.com/)
