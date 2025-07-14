@@ -1,0 +1,73 @@
+// process.stdin.setEncoding("utf8");
+
+// let input = "";
+
+// process.stdin.on("data", function (data) {
+//   input += data;
+// });
+
+// process.stdin.on("end", function () {
+//   let lines = input.trim().split("\n");
+//   let n = parseInt(lines[0]);
+//   let index = 1;
+
+//   while (n-- > 0) {
+//     let score1 = lines[index].split(" ").map(Number);
+//     let score2 = lines[index + 1].split(" ").map(Number);
+
+//     let sum1 = score1.reduce((x, y) => x + y, 0);
+//     let sum2 = score2.reduce((x, y) => x + y, 0);
+
+//     if (sum1 == sum2) {
+//       if (score1[0] == score2[0]) {
+//         if (score1[1] == score2[1]) {
+//           console.log("TIE");
+//           // return;
+//         } else {
+//           if (score1[1] > score2[1]) {
+//             console.log("DRAGON");
+//             // return;
+//           } else {
+//             console.log("SLOTH");
+//             // return;
+//           }
+//         }
+//       } else {
+//         if (score1[0] > score2[0]) {
+//           console.log("DRAGON");
+//           // return;
+//         } else {
+//           console.log("SLOTH");
+//           // return;
+//         }
+//       }
+//     } else {
+//       if (sum1 > sum2) {
+//         console.log("DRAGON");
+//         // return;
+//       } else {
+//         console.log("SLOTH");
+//         // return;
+//       }
+//     }
+
+//     index += 2;
+//   }
+// });
+
+const debounce = (fn, time = 300) => {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, args);
+    }, time);
+  };
+};
+
+const saveInput = () => {
+  console.log("Saving data!!");
+};
+
+const processChange = debounce(() => saveInput());
+processChange();
