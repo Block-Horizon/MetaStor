@@ -1,18 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { Download, RefreshCw, FileText } from "lucide-react";
-import { useAuthStore } from "../../store/authStore";
+import {
+  LuFileText,
+  LuDownload,
+  LuTrash2,
+  LuPencil,
+  LuSave,
+  LuX,
+  LuShare2,
+  LuSearch,
+  LuRefreshCw,
+} from "react-icons/lu";
 import { AuthGuard } from "../../components/AuthGuard";
 import { Navbar } from "../../components/navbar";
-import { Card, CardContent, CardHeader } from "@repo/ui/components/ui/card";
 import {
-  CardDescription,
+  Card,
+  CardContent,
+  CardHeader,
   CardTitle,
-} from "@repo/ui/components/ui/card-hover-effect";
+  CardDescription,
+} from "@repo/ui/components/ui/card";
 import { Button } from "@repo/ui/components/ui/button";
+import { Input } from "@repo/ui/components/ui/input";
 import {
   Table,
   TableBody,
@@ -21,9 +33,21 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/ui/table";
-import { motion } from "framer-motion";
-import Link from "next/link";
 import { apiFetch } from "../../lib/api";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@repo/ui/components/ui/alert-dialog";
+import { motion } from "framer-motion";
+import { useAuthStore } from "../../store/authStore";
+import Link from "next/link";
 
 interface FileData {
   id: number;
@@ -38,7 +62,10 @@ export default function DashboardPage() {
   const [files, setFiles] = useState<FileData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const { pubKey, token, clearAuth } = useAuthStore();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editName, setEditName] = useState("");
+  const { token, clearAuth } = useAuthStore();
 
   const fetchFiles = async () => {
     if (!token) {
@@ -59,7 +86,7 @@ export default function DashboardPage() {
         token,
         clearAuth
       );
-      const data = response.data;
+      const data = await response.data;
       if (data && Array.isArray(data.files)) {
         setFiles(data.files);
       } else if (data && data.files && typeof data.files === "object") {
@@ -85,11 +112,74 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchFiles();
-  }, [pubKey]);
+  }, [token]);
 
   const handleRefresh = () => {
     setRefreshing(true);
     fetchFiles();
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await apiFetch(
+        "/api/delete",
+        {
+          method: "POST",
+          body: JSON.stringify({ fileId: id }),
+        },
+        token,
+        clearAuth
+      );
+      toast.success("File deleted successfully");
+      fetchFiles();
+    } catch (error: any) {
+      toast.error(error.message || "Failed to delete file");
+    }
+  };
+
+  const startEdit = (id: number, name: string) => {
+    setEditingId(id);
+    setEditName(name);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditName("");
+  };
+
+  const saveEdit = async (id: number) => {
+    if (!editName.trim()) {
+      toast.error("File name cannot be empty");
+      return;
+    }
+    try {
+      await apiFetch(
+        `/api/file/${id}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ newName: editName }),
+        },
+        token,
+        clearAuth
+      );
+      toast.success("File renamed successfully");
+      fetchFiles();
+      cancelEdit();
+    } catch (error: any) {
+      toast.error(error.message || "Failed to rename file");
+    }
+  };
+
+  const handleShare = (cid: string, filename: string) => {
+    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy?cid=${cid}&filename=${encodeURIComponent(filename)}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        toast.success("Share link copied to clipboard");
+      })
+      .catch(() => {
+        toast.error("Failed to copy link");
+      });
   };
 
   const isImageFile = (fileName: string) => {
@@ -97,9 +187,9 @@ export default function DashboardPage() {
     return imageExtensions.some((ext) => fileName.toLowerCase().endsWith(ext));
   };
 
-  const getDownloadUrl = (cid: string, filename: string) => {
-    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy?cid=${cid}&filename=${encodeURIComponent(filename)}`;
-  };
+  const filteredFiles = files.filter((file) =>
+    file.fileName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -115,7 +205,7 @@ export default function DashboardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-zinc-400" />
+                <LuRefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-zinc-400" />
                 <p className="text-lg text-zinc-300">Loading your files...</p>
               </motion.div>
             </div>
@@ -129,7 +219,7 @@ export default function DashboardPage() {
     <AuthGuard>
       <div className="relative min-h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
         <Navbar />
-
+       
         <section className="container mx-auto px-4 py-16 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -138,13 +228,14 @@ export default function DashboardPage() {
             className="mb-10 text-center"
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-200">
-              Your Decentralized Files
+              Your Dashboard
             </h1>
             <p className="text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto">
-              Manage your uploaded files on IPFS with security and style.
+              Manage your decentralized files with ease.
             </p>
           </motion.div>
           <div className="relative">
+            
             <Card className="relative z-10 bg-zinc-900/80 border border-zinc-800 shadow-xl backdrop-blur-lg">
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -152,7 +243,7 @@ export default function DashboardPage() {
                     <CardTitle className="bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-200">
                       Your Files
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-zinc-400">
                       Manage your uploaded files on IPFS
                     </CardDescription>
                   </div>
@@ -172,28 +263,37 @@ export default function DashboardPage() {
                       size="sm"
                       className="border-zinc-600 text-zinc-100 hover:bg-zinc-800 bg-zinc-900 hover:text-zinc-100 transition-all duration-300"
                     >
-                      <RefreshCw
+                      <LuRefreshCw
                         className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
                       />
                       Refresh
                     </Button>
                   </div>
                 </div>
+                <div className="mt-4 flex items-center gap-2 max-w-md">
+                  <LuSearch className="h-5 w-5 text-zinc-400" />
+                  <Input
+                    placeholder="Search files..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-zinc-800 border-zinc-700 text-zinc-100"
+                  />
+                </div>
               </CardHeader>
               <CardContent>
-                {files.length === 0 ? (
+                {filteredFiles.length === 0 ? (
                   <motion.div
                     className="text-center py-16"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                   >
-                    <FileText className="h-16 w-16 text-zinc-500 mx-auto mb-6" />
+                    <LuFileText className="h-16 w-16 text-zinc-500 mx-auto mb-6" />
                     <h3 className="text-2xl font-semibold text-zinc-100 mb-2">
-                      No files uploaded yet
+                      No files found
                     </h3>
                     <p className="text-zinc-400 mb-6">
-                      Start by uploading your first file to IPFS
+                      Upload your first file to get started
                     </p>
                     <Button
                       variant="outline"
@@ -223,7 +323,7 @@ export default function DashboardPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {files.map((file, idx) => (
+                        {filteredFiles.map((file, idx) => (
                           <motion.tr
                             key={file.id}
                             initial={{ opacity: 0, y: 10 }}
@@ -235,7 +335,7 @@ export default function DashboardPage() {
                               {isImageFile(file.fileName) ? (
                                 <img
                                   src={
-                                    getDownloadUrl(file.cid, file.fileName) ||
+                                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy?cid=${file.cid}&filename=${encodeURIComponent(file.fileName)}` ||
                                     "/placeholder.svg"
                                   }
                                   alt={file.fileName}
@@ -247,12 +347,49 @@ export default function DashboardPage() {
                                 />
                               ) : (
                                 <div className="w-14 h-14 bg-zinc-800 rounded flex items-center justify-center border border-zinc-700">
-                                  <FileText className="h-7 w-7 text-zinc-500" />
+                                  <LuFileText className="h-7 w-7 text-zinc-500" />
                                 </div>
                               )}
                             </TableCell>
                             <TableCell className="font-medium text-zinc-100">
-                              {file.fileName}
+                              {editingId === file.id ? (
+                                <div className="flex items-center space-x-2">
+                                  <Input
+                                    value={editName}
+                                    onChange={(e) =>
+                                      setEditName(e.target.value)
+                                    }
+                                    className="bg-zinc-800 border-zinc-700 text-zinc-100"
+                                  />
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => saveEdit(file.id)}
+                                  >
+                                    <LuSave className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={cancelEdit}
+                                  >
+                                    <LuX className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              ) : (
+                                <div className="flex items-center space-x-2">
+                                  {file.fileName}
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() =>
+                                      startEdit(file.id, file.fileName)
+                                    }
+                                  >
+                                    <LuPencil className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              )}
                             </TableCell>
                             <TableCell className="text-zinc-400">
                               {format(
@@ -263,7 +400,7 @@ export default function DashboardPage() {
                             <TableCell className="font-mono text-sm text-zinc-400">
                               {file.cid.slice(0, 8)}...{file.cid.slice(-8)}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="flex space-x-2">
                               <Button
                                 asChild
                                 size="sm"
@@ -271,15 +408,60 @@ export default function DashboardPage() {
                                 className="border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-zinc-900 hover:text-zinc-100 transition-all duration-300"
                               >
                                 <Link
-                                  href={getDownloadUrl(file.cid, file.fileName)}
+                                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy?cid=${file.cid}&filename=${encodeURIComponent(file.fileName)}`}
                                   download={file.fileName}
                                   className="inline-flex items-center"
                                   passHref
                                 >
-                                  <Download className="h-4 w-4 mr-2" />
+                                  <LuDownload className="h-4 w-4 mr-2" />
                                   Download
                                 </Link>
                               </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border-zinc-700 text-zinc-200 hover:bg-zinc-800 bg-zinc-900 hover:text-zinc-100 transition-all duration-300"
+                                onClick={() =>
+                                  handleShare(file.cid, file.fileName)
+                                }
+                              >
+                                <LuShare2 className="h-4 w-4 mr-2" />
+                                Share
+                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="bg-red-600 hover:bg-red-700"
+                                  >
+                                    <LuTrash2 className="h-4 w-4 mr-2" />
+                                    Delete
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className="bg-zinc-900 border-zinc-800">
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle className="text-zinc-100">
+                                      Confirm Deletion
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription className="text-zinc-400">
+                                      This action will soft-delete the file. It
+                                      can be recovered later if needed.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel className="border-zinc-700 text-zinc-200 hover:bg-zinc-800">
+                                      Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                      onClick={() => handleDelete(file.id)}
+                                      className="bg-red-600 hover:bg-red-700 text-white"
+                                    >
+                                      Delete
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
                             </TableCell>
                           </motion.tr>
                         ))}

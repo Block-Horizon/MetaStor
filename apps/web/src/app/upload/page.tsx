@@ -8,8 +8,6 @@ import { Transaction } from "@solana/web3.js";
 import toast from "react-hot-toast";
 import { LuUpload, LuFileText } from "react-icons/lu";
 import { motion } from "framer-motion";
-import { BackgroundBeams } from "@repo/ui/components/ui/background-beams";
-import { SparklesCore } from "@repo/ui/components/ui/sparkles";
 
 import {
   Card,
@@ -149,7 +147,7 @@ export default function UploadPage() {
     <AuthGuard>
       <div className="relative min-h-screen bg-zinc-950 text-zinc-100 overflow-hidden">
         <Navbar />
-        <BackgroundBeams className="opacity-20" />
+        
         <section className="container mx-auto px-4 py-16 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -165,15 +163,7 @@ export default function UploadPage() {
             </p>
           </motion.div>
           <div className="relative">
-            <SparklesCore
-              id="upload-sparkles"
-              background="transparent"
-              minSize={0.6}
-              maxSize={1.4}
-              particleDensity={80}
-              className="absolute inset-0 w-full h-full z-0 pointer-events-none"
-              particleColor="#71717a"
-            />
+           
             <Card className="relative z-10 max-w-2xl mx-auto bg-zinc-900/80 border border-zinc-800 shadow-xl backdrop-blur-lg">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-2xl bg-clip-text text-transparent bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-200">
