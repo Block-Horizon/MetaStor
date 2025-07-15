@@ -8,37 +8,7 @@ import { SparklesCore } from "@repo/ui/components/ui/sparkles";
 import { TextGenerateEffect } from "@repo/ui/components/ui/text-generate-effect";
 import { HoverEffect } from "@repo/ui/components/ui/card-hover-effect";
 import { Navbar } from "../components/navbar";
-
-// interface TeamMember {
-//   id: number;
-//   name: string;
-//   designation: string;
-//   image: string;
-// }
-
-// const teamMembers: TeamMember[] = [
-//   {
-//     id: 1,
-//     name: "John Doe",
-//     designation: "Founder & CEO",
-//     image:
-//       "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80",
-//   },
-//   {
-//     id: 2,
-//     name: "Jane Smith",
-//     designation: "CTO",
-//     image:
-//       "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-//   },
-//   {
-//     id: 3,
-//     name: "Robert Johnson",
-//     designation: "Lead Developer",
-//     image:
-//       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60",
-//   },
-// ];
+import { WalletConnectButton } from "../components/WalletConnect";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -291,7 +261,7 @@ const AnimatedGradientButton = () => {
           ease: "linear",
         }}
       />
-      <Button
+      {/* <Button
         size="lg"
         className="relative px-7 py-4 bg-zinc-900 rounded-lg leading-none flex items-center divide-x divide-gray-600"
       >
@@ -313,6 +283,10 @@ const AnimatedGradientButton = () => {
         <span className="pl-6 text-indigo-400 group-hover:text-gray-100 transition duration-200">
           →
         </span>
+      </Button> */}
+
+      <Button size="lg" className="relative px-7 py-4 bg-zinc-900 rounded-lg">
+        <WalletConnectButton />
       </Button>
     </div>
   );

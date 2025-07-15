@@ -21,5 +21,6 @@ model File {
   cid       String
   timestamp DateTime @default(now())
   paid      Boolean  @default(false)
+  deleted   Boolean  @default(false)  // New for soft delete
   user      User     @relation(fields: [userId], references: [id])
 }

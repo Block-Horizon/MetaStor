@@ -3,12 +3,15 @@ import { PublicKey } from "@solana/web3.js";
 import * as nacl from "tweetnacl";
 import prisma from "../lib/prisma";
 import { authSchema } from "../utils/validator";
+import jwt from "jsonwebtoken";
 
 const router = Router();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
     const { pubKey, signature, nonce } = authSchema.parse(req.body);
+
+    console.log("Here1")
 
     const msgBuffer = Buffer.from(nonce, "utf8");
     const msg = new Uint8Array(msgBuffer);
@@ -40,7 +43,11 @@ router.post("/", async (req: Request, res: Response) => {
       create: { pubKey },
     });
 
-    res.json({ success: true, user: { pubKey } });
+    const token = jwt.sign({ pubKey }, process.env.JWT_SECRET!, {
+      expiresIn: "1h",
+    });
+
+    res.json({ success: true, token, user: { pubKey } });
   } catch (error) {
     console.error(error);
     res.status(400).json({

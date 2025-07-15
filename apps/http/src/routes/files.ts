@@ -1,12 +1,13 @@
-import { Router,type Request,type Response } from "express";
+import { Router, type Request, type Response } from "express";
 import prisma from "../lib/prisma";
-import { filesSchema } from "../utils/validator";
+import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
+router.use(authMiddleware);
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const { pubKey } = filesSchema.parse(req.query);
+    const pubKey = req.user!.pubKey; // From JWT
     const user = await prisma.user.findUnique({ where: { pubKey } });
     if (!user) {
       return res.json({ files: [] });
