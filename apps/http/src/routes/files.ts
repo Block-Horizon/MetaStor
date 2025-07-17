@@ -1,4 +1,4 @@
-import { Router,type Request,type Response } from "express";
+import { Router, type Request, type Response } from "express";
 import prisma from "../lib/prisma";
 import { authMiddleware } from "../middleware/auth";
 
@@ -24,7 +24,12 @@ router.get("/", async (req: Request, res: Response) => {
       orderBy: { timestamp: "desc" },
       take: 10,
     });
-    res.json({ files });
+    res.json({
+      files: files.map((file) => ({
+        ...file,
+        size: file.size !== undefined ? file.size.toString() : undefined,
+      })),
+    });
   } catch (error) {
     console.error(error);
     res

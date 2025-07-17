@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "@repo/ui/components/ui/button";
-import { LuWallet, LuLogOut } from "react-icons/lu";
+import { LuWallet, LuLogOut, LuShield, LuUser, LuKey } from "react-icons/lu";
 import { apiFetch } from "../lib/api";
 import { useAuthStore } from "../store/authStore";
 import {
@@ -95,27 +95,52 @@ export function WalletConnectButton() {
 
   if (connected && token && pubKey) {
     return (
-      <div className="flex items-center space-x-2">
-        <span className="text-sm text-gray-600 dark:text-gray-400 hidden md:block">
-          {pubKey.slice(0, 6)}...{pubKey.slice(-4)}
-        </span>
-        <WalletMultiButton />
+      <div className="flex items-center space-x-3">
+        {/* User Status Badge */}
+        <div className="hidden md:flex items-center space-x-2 bg-zinc-800 px-4 py-2 rounded-xl border border-blue-700/40 shadow">
+          <div className="flex items-center space-x-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+            <LuUser className="h-4 w-4 text-blue-400" />
+            <span className="text-sm font-medium text-zinc-300">
+              {pubKey.slice(0, 6)}...{pubKey.slice(-4)}
+            </span>
+          </div>
+        </div>
+
+        {/* Wallet Button with Custom Styling */}
+        <div className="wallet-button-container">
+          <WalletMultiButton />
+        </div>
+
+        {/* Logout Button */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button
+              variant="outline"
+              size="icon"
+              className="bg-zinc-800 border border-blue-700/40 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 transition-all duration-300 shadow"
+            >
               <LuLogOut className="h-4 w-4" />
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="bg-zinc-900 border-blue-700/40 border">
             <AlertDialogHeader>
-              <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to log out?
+              <AlertDialogTitle className="text-zinc-100 flex items-center space-x-2">
+                <LuLogOut className="h-5 w-5 text-blue-400" />
+                <span>Confirm Logout</span>
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-zinc-400">
+                Are you sure you want to disconnect your wallet and log out?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleLogout}>
+              <AlertDialogCancel className="bg-zinc-800 border border-blue-700/40 text-zinc-300 hover:bg-zinc-700">
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleLogout}
+                className="bg-red-700 hover:bg-red-800 text-white border border-red-800"
+              >
                 Logout
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -127,15 +152,29 @@ export function WalletConnectButton() {
 
   if (connected && !token) {
     return (
-      <div className="flex items-center space-x-2">
-        <Button onClick={handleAuth} variant="outline">
-          <LuWallet className="mr-2 h-4 w-4" />
+      <div className="flex items-center space-x-3">
+        {/* Authentication Button */}
+        <Button
+          onClick={handleAuth}
+          className="bg-blue-700 hover:bg-blue-800 text-white border border-blue-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+        >
+          <LuShield className="mr-2 h-4 w-4 text-blue-400" />
           Authenticate
         </Button>
-        <WalletMultiButton />
+
+        {/* Wallet Button */}
+        <div className="wallet-button-container">
+          <WalletMultiButton />
+        </div>
       </div>
     );
   }
 
-  return <WalletMultiButton />;
+  return (
+    <div className="wallet-connect-container">
+      <div className="wallet-button-container">
+        <WalletMultiButton />
+      </div>
+    </div>
+  );
 }
