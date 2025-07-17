@@ -85,7 +85,7 @@ export default function UploadPage() {
           method: "POST",
           body: formData,
         },
-        token,
+        token ?? undefined,
         clearAuth
       );
 

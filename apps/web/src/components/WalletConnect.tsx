@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "@repo/ui/components/ui/button";
-import { LuWallet, LuLogOut, LuShield, LuUser, LuKey } from "react-icons/lu";
+import {  LuLogOut, LuShield, LuUser } from "react-icons/lu";
 import { apiFetch } from "../lib/api";
 import { useAuthStore } from "../store/authStore";
 import {

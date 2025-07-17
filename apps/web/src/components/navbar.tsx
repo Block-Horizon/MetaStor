@@ -151,11 +151,6 @@ export function Navbar() {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                <div className="p-2 rounded-lg bg-zinc-900 border border-blue-700/40 flex items-center justify-center">
-                  <div className="w-6 h-6 bg-zinc-800 rounded-md flex items-center justify-center">
-                    <div className="w-3 h-3 bg-blue-400 rounded-sm" />
-                  </div>
-                </div>
                 <span className="text-2xl font-bold text-zinc-100">
                   MetaStor
                 </span>
@@ -310,7 +305,6 @@ export function Navbar() {
                           Subscription
                         </Link>
                       </DropdownMenuItem>
-              
                     </div>
                     <DropdownMenuSeparator className="bg-zinc-800/50" />
                     <div className="py-1">
