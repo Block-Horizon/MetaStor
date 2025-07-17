@@ -29,7 +29,6 @@ module.exports = {
         project,
       },
       node: {
-        extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
       },
     },
   },

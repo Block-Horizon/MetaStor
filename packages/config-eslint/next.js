@@ -34,9 +34,7 @@ module.exports = {
       typescript: {
         project,
       },
-      node: {
-        extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx"],
-      },
+      node: {},
     },
   },
   ignorePatterns: ["node_modules/", "dist/"],
