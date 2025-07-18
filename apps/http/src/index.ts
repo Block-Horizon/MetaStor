@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
 import { errorHandler } from "./middleware/error";
-
-// Import routes
 import authRoutes from "./routes/auth";
 import uploadRoutes from "./routes/upload";
 import confirmRoutes from "./routes/confirm";
@@ -43,9 +41,6 @@ const corsOptions = {
 
 // Apply CORS middleware
 app.use(cors(corsOptions));
-
-// Handle preflight requests explicitly
-app.options("*", cors(corsOptions));
 
 // Increase payload limits for large file uploads
 app.use(express.json({ limit: "100mb" }));
