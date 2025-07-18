@@ -207,7 +207,7 @@ export default function DashboardPage() {
   };
 
   const getFilePreviewUrl = (file: FileData) => {
-    return `${process.env.NEXT_PUBLIC_API_URL}/api/proxy/${file.cid}`;
+    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy/${file.cid}`;
   };
 
   const filteredAndSortedFiles = files
@@ -872,6 +872,14 @@ export default function DashboardPage() {
                       alt={previewFile.fileName}
                       className="rounded-xl max-h-96 mx-auto mb-4 border border-zinc-800"
                     />
+                  ) : getFileType(previewFile.fileName) === "videos" ? (
+                    <video
+                      src={getFilePreviewUrl(previewFile)}
+                      controls
+                      className="rounded-xl max-h-96 mx-auto mb-4 border border-zinc-800"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
                   ) : (
                     <div className="mb-4 text-zinc-300">
                       <p>
