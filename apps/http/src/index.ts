@@ -15,13 +15,7 @@ const PORT = process.env.PORT || 3001;
 
 // Enhanced CORS configuration
 const corsOptions = {
-  origin: [
-    "https://meta-stor.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:3001",
-  ],
+  origin: ["http://localhost:3000", "http://localhost:3001"],
   credentials: true,
   allowedHeaders: [
     "Origin",
