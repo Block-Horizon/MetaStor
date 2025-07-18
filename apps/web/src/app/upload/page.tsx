@@ -62,6 +62,43 @@ export default function UploadPage() {
         toast.error("File size must be less than 10MB");
         return;
       }
+      // Check file type
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      const allowed = [
+        "jpg",
+        "jpeg",
+        "png",
+        "gif",
+        "webp",
+        "svg",
+        "mp4",
+        "avi",
+        "mov",
+        "wmv",
+        "flv",
+        "webm",
+        "mp3",
+        "wav",
+        "flac",
+        "aac",
+        "ogg",
+        "pdf",
+        "doc",
+        "docx",
+        "txt",
+        "rtf",
+        "zip",
+        "rar",
+        "7z",
+        "tar",
+        "gz",
+      ];
+      if (!ext || !allowed.includes(ext)) {
+        toast.error(
+          "Unsupported file format. Please upload an image, video, audio, document, or archive."
+        );
+        return;
+      }
       setSelectedFile(file);
     }
   };
@@ -98,10 +135,10 @@ export default function UploadPage() {
 
       // Add to uploaded files list
       const newFile: UploadedFile = {
-        id: data.fileId,
-        fileName: selectedFile.name,
-        size: selectedFile.size,
-        cid: data.cid,
+        id: data.file?.id || data.fileId,
+        fileName: data.file?.fileName || selectedFile.name,
+        size: Number(data.file?.size) || selectedFile.size,
+        cid: data.file?.cid || data.cid,
       };
       setUploadedFiles((prev) => [newFile, ...prev]);
 
@@ -152,7 +189,7 @@ export default function UploadPage() {
     return "other";
   };
   const getFilePreviewUrl = (file: UploadedFile) => {
-    return `${process.env.NEXT_PUBLIC_API_URL}/api/proxy/${file.cid}`;
+    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy?cid=${file.cid}&filename=${file.fileName}`;
   };
 
   return (

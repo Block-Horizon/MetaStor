@@ -27,6 +27,7 @@ import {
   LuActivity,
   LuFolderOpen,
   LuStar,
+  LuX,
 } from "react-icons/lu";
 import { CiGrid31 as LuGrid } from "react-icons/ci";
 import { motion, AnimatePresence } from "framer-motion";
@@ -139,7 +140,7 @@ export default function DashboardPage() {
   const handleDelete = async (fileId: number) => {
     try {
       await apiFetch(
-        `/api/delete/${fileId}`,
+        `/api/delete?fileId=${fileId}`,
         { method: "DELETE" },
         token || undefined,
         clearAuth
@@ -207,7 +208,7 @@ export default function DashboardPage() {
   };
 
   const getFilePreviewUrl = (file: FileData) => {
-    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy/${file.cid}`;
+    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/proxy?cid=${file.cid}&filename=${file.fileName}`;
   };
 
   const filteredAndSortedFiles = files
@@ -860,57 +861,71 @@ export default function DashboardPage() {
           </motion.div>
           {/* File Preview Modal */}
           <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-            <DialogContent className="bg-zinc-900 border border-blue-700/50">
-              {previewFile && (
-                <>
-                  <DialogHeader>
-                    <DialogTitle>File Preview</DialogTitle>
-                  </DialogHeader>
-                  {getFileType(previewFile.fileName) === "images" ? (
-                    <img
-                      src={getFilePreviewUrl(previewFile)}
-                      alt={previewFile.fileName}
-                      className="rounded-xl max-h-96 mx-auto mb-4 border border-zinc-800"
-                    />
-                  ) : getFileType(previewFile.fileName) === "videos" ? (
-                    <video
-                      src={getFilePreviewUrl(previewFile)}
-                      controls
-                      className="rounded-xl max-h-96 mx-auto mb-4 border border-zinc-800"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="mb-4 text-zinc-300">
-                      <p>
-                        <span className="font-semibold">Name:</span>{" "}
-                        {previewFile.fileName}
-                      </p>
-                      <p>
-                        <span className="font-semibold">Size:</span>{" "}
-                        {formatBytes(previewFile.size)}
-                      </p>
-                      <p>
-                        <span className="font-semibold">CID:</span>{" "}
-                        <span className="font-mono text-xs break-all">
-                          {previewFile.cid}
-                        </span>
-                      </p>
+            <DialogContent className="bg-zinc-950 border border-blue-700/70 shadow-2xl max-w-2xl w-full mx-auto rounded-2xl overflow-hidden p-0">
+              <div className="flex flex-col items-center justify-center min-h-[400px] p-8 relative">
+                <button
+                  onClick={() => setPreviewOpen(false)}
+                  className="absolute top-4 right-4 z-20 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-full p-2 shadow-lg"
+                  aria-label="Close preview"
+                >
+                  <LuX className="h-5 w-5" />
+                </button>
+                {previewFile && (
+                  <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
+                    <DialogHeader className="mb-4 w-full text-center">
+                      <DialogTitle className="text-2xl text-blue-400 font-bold">
+                        File Preview
+                      </DialogTitle>
+                    </DialogHeader>
+                    {getFileType(previewFile.fileName) === "images" ? (
+                      <img
+                        src={getFilePreviewUrl(previewFile)}
+                        alt={previewFile.fileName}
+                        className="rounded-xl max-h-96 mx-auto mb-4 border border-zinc-800 shadow-lg"
+                      />
+                    ) : getFileType(previewFile.fileName) === "videos" ? (
+                      <video
+                        src={getFilePreviewUrl(previewFile)}
+                        controls
+                        className="rounded-xl max-h-96 mx-auto mb-4 border border-zinc-800 shadow-lg"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <div className="mb-4 text-zinc-300 text-center">
+                        <p>
+                          <span className="font-semibold">Name:</span>{" "}
+                          {previewFile.fileName}
+                        </p>
+                        <p>
+                          <span className="font-semibold">Size:</span>{" "}
+                          {formatBytes(previewFile.size)}
+                        </p>
+                        <p>
+                          <span className="font-semibold">CID:</span>{" "}
+                          <span className="font-mono text-xs break-all">
+                            {previewFile.cid}
+                          </span>
+                        </p>
+                        <p className="mt-2 text-zinc-500">
+                          No preview available for this file type.
+                        </p>
+                      </div>
+                    )}
+                    <div className="flex gap-2 mt-4 justify-center w-full">
+                      <Button
+                        onClick={() =>
+                          handleDownload(previewFile.cid, previewFile.fileName)
+                        }
+                        className="bg-blue-700 hover:bg-blue-800 text-white border border-blue-800 font-semibold rounded-xl shadow-lg"
+                      >
+                        <LuDownload className="h-4 w-4 mr-2 text-white" />
+                        Download
+                      </Button>
                     </div>
-                  )}
-                  <div className="flex gap-2 mt-4">
-                    <Button
-                      onClick={() =>
-                        handleDownload(previewFile.cid, previewFile.fileName)
-                      }
-                      className="bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border border-blue-700/40 font-semibold rounded-xl"
-                    >
-                      <LuDownload className="h-4 w-4 mr-2 text-blue-400" />
-                      Download
-                    </Button>
                   </div>
-                </>
-              )}
+                )}
+              </div>
             </DialogContent>
           </Dialog>
         </section>

@@ -1,18 +1,17 @@
-import { Router, Request, Response } from "express";
-import { z } from "zod";
+import { Router, type Request, type Response } from "express";
 import prisma from "../lib/prisma";
 import { authMiddleware } from "../middleware/auth";
-
-const deleteSchema = z.object({
-  fileId: z.number(),
-});
 
 const router = Router();
 router.use(authMiddleware);
 
-router.post("/", async (req: Request, res: Response) => {
+router.delete("/", async (req: Request, res: Response) => {
   try {
-    const { fileId } = deleteSchema.parse(req.body);
+    const fileIdRaw = req.query.fileId;
+    const fileId = Number(fileIdRaw);
+    if (!fileIdRaw || isNaN(fileId)) {
+      return res.status(400).json({ error: "Missing or invalid fileId" });
+    }
     const pubKey = req.user!.pubKey;
     const user = await prisma.user.findUnique({ where: { pubKey } });
     if (!user) {

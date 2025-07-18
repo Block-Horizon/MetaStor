@@ -83,6 +83,7 @@ router.post(
           size: newFileSize,
           paid: true, // Auto-approve since no payment required
           timestamp: new Date(),
+          mimetype: req.file.mimetype, // Save mimetype
         },
       });
 

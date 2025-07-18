@@ -26,6 +26,7 @@ model File {
   paid      Boolean  @default(false)
   size      BigInt   @default(0)
   deleted   Boolean  @default(false)
+  mimetype  String?
   user      User     @relation(fields: [userId], references: [id])
 
   @@index([userId, deleted])
