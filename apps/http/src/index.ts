@@ -25,9 +25,19 @@ app.use(
       "http://127.0.0.1:3000",
       "http://127.0.0.1:3001",
     ],
+    credentials: true,
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    exposedHeaders: ["Content-Disposition"],
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 // Routes
 app.use("/api/auth", authRoutes);
